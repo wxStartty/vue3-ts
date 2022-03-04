@@ -15,9 +15,11 @@ const app = createApp(App)
 // 1 registerApp(app)
 
 app.use(globalRegister)
-app.use(router)
 app.use(store)
+// notes.md的问题1
+// 先匹配完动态路由，后app.use(router)
 setupStore()
+app.use(router)
 app.mount('#app')
 
 // console.log(process.env.VUE_APP_BASE_URL)
