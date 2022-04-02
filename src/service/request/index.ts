@@ -2,7 +2,7 @@ import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { WXRequestInterceptors, WXRequestConfig } from './type'
 import { ElLoading } from 'element-plus/lib'
-// import { ILoadingInstance } from 'element-plus/lib/'
+import { ILoadingInstance } from 'element-plus/lib/el-loading/src/loading.type'
 
 const DEFAULT_LOADING = true
 
@@ -10,7 +10,7 @@ class WXRequest {
   instance: AxiosInstance
   interceptors?: WXRequestInterceptors
   showLoading: boolean
-  loading?: any
+  loading?: ILoadingInstance
   constructor(config: WXRequestConfig) {
     // 创建axios实例
     this.instance = axios.create(config)
@@ -72,7 +72,7 @@ class WXRequest {
     )
   }
 
-  request<T>(config: WXRequestConfig<T>): Promise<T> {
+  request<T = any>(config: WXRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 3.单独请求的拦截
       if (config.interceptors?.requestInterceptor) {
@@ -103,16 +103,16 @@ class WXRequest {
     })
   }
 
-  get<T>(config: WXRequestConfig<T>): Promise<T> {
+  get<T = any>(config: WXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
-  post<T>(config: WXRequestConfig<T>): Promise<T> {
+  post<T = any>(config: WXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
-  delete<T>(config: WXRequestConfig<T>): Promise<T> {
+  delete<T = any>(config: WXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
-  patch<T>(config: WXRequestConfig<T>): Promise<T> {
+  patch<T = any>(config: WXRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }

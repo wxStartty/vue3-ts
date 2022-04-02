@@ -55,7 +55,6 @@ export default defineComponent({
     const phoneRef = ref<InstanceType<typeof LoginPhone>>()
 
     const handleLoginClick = () => {
-      console.log(accountRef.value)
       accountRef.value?.loginAction(isKeepPassword.value)
     }
 

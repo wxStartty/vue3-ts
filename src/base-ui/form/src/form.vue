@@ -1,10 +1,14 @@
 <template>
   <div class="wx-form">
+    <div class="header">
+      <slot name="header"></slot>
+    </div>
     <el-form :label-width="labelWidth">
       <el-row>
         <template v-for="item in formItems" :key="item.label">
           <el-col v-bind="colLayout">
             <el-form-item
+              v-if="!item.isHidden"
               :label="item.label"
               :rules="item.rules"
               :style="itemStyle"
@@ -16,6 +20,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -23,6 +29,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -36,6 +44,8 @@
                 <el-date-picker
                   style="width: 100%"
                   v-bind="item.otherOptions"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -43,6 +53,9 @@
         </template>
       </el-row>
     </el-form>
+    <div class="footer">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
@@ -52,6 +65,10 @@ import { IFormItem } from '../types'
 
 export default defineComponent({
   props: {
+    modelValue: {
+      type: Object,
+      required: true
+    },
     formItems: {
       type: Array as PropType<IFormItem[]>,
       default: () => []
@@ -75,8 +92,37 @@ export default defineComponent({
       })
     }
   },
-  setup() {
-    return {}
+  setup(props, { emit }) {
+    // const formData = ref({ ...props.modelValue })
+    // 重置解决方式一
+    // watch(
+    //   formData,
+    //   (newValue) => {
+    //     console.log(newValue)
+    //     emit('update:modelValue', newValue)
+    //   },
+    //   {
+    //     deep: true
+    //   }
+    // )
+    // 不可用，超出调用执行栈
+    // watch(
+    //   () => props.modelValue,
+    //   (newValue) => {
+    //     console.log('newValue', newValue)
+    //     formData.value = { ...newValue }
+    //   }
+    // )
+
+    // 重置解决方式二
+    const handleValueChange = (value: any, field: string) => {
+      emit('update:modelValue', { ...props.modelValue, [field]: value })
+    }
+
+    return {
+      // formData,
+      handleValueChange
+    }
   }
 })
 </script>

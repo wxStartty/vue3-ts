@@ -6,4 +6,4 @@ declare module '*.vue' {
 }
 
 declare let $store: any
-// declare module 'element-plus'
+declare module '*.json'

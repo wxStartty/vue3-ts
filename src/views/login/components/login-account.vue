@@ -29,7 +29,6 @@ export default defineComponent({
 
     const loginAction = (isKeepPassword: boolean) => {
       formRef.value?.validate((valid) => {
-        console.log('valid', valid)
         if (valid) {
           if (isKeepPassword) {
             localCache.setCache('name', account.name)
